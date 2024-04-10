@@ -20,8 +20,9 @@ module.exports={
         let area=req.body.area;
         let vacio='- - -';
         let em_vacio=0;
-        let time_2=req.body.time_2
-        mysql.query(`insert into reportes_clientes (fecha_hora_report, numero_habitacion, problema, estado, area, hora_alta, responsable, date_asignacion_respon, hora_proceso, hora_cierre, hora_inconcluso, comentarios, nom_responsable_cierre) values ('${time_2}', ${num_room},'${Incidencia}','${estado}',${area},'${time}',${em_vacio},'${vacio}','${vacio}','${vacio}','${vacio}','${vacio}',${em_vacio})`, function(err,result,fields){
+        let time_2=req.body.time_2;
+        let observaciones=req.body.observaciones;
+        mysql.query(`insert into reportes_clientes (fecha_hora_report, numero_habitacion, problema, observaciones, estado, area, hora_alta, responsable, date_asignacion_respon, hora_proceso, hora_cierre, hora_inconcluso, comentarios, nom_responsable_cierre) values ('${time_2}', ${num_room},'${Incidencia}','${observaciones}','${estado}',${area},'${time}',${em_vacio},'${vacio}','${vacio}','${vacio}','${vacio}','${vacio}',${em_vacio})`, function(err,result,fields){
             if(err){
                 res.json(err);
             }
@@ -72,7 +73,7 @@ module.exports={
         let res_1=req.params.res;
 
             mysql.query(`SELECT reportes_clientes.id_report, reportes_clientes.fecha_hora_report, reportes_clientes.numero_habitacion, 
-            reportes_clientes.problema, areas_hotel.nombre_de_area, empleado_1.apellido_p, empleado_1.apellido_m, empleado_1.nombres, 
+            reportes_clientes.problema, reportes_clientes.observaciones ,areas_hotel.nombre_de_area, empleado_1.apellido_p, empleado_1.apellido_m, empleado_1.nombres, 
             reportes_clientes.date_asignacion_respon,reportes_clientes.estado,reportes_clientes.hora_alta,reportes_clientes.hora_proceso,
             reportes_clientes.hora_cierre,reportes_clientes.hora_inconcluso,reportes_clientes.comentarios, 
             empleado_2.apellido_p as cierr_p, empleado_2.apellido_m as cierr_m, empleado_2.nombres as cierr_n
@@ -99,7 +100,7 @@ module.exports={
         let id_empleado=req.params.empleado;
 
         mysql.query(`SELECT  reportes_clientes.id_report, reportes_clientes.numero_habitacion, 
-        reportes_clientes.problema,  empleados.apellido_p, empleados.apellido_m, empleados.nombres, 
+        reportes_clientes.problema,  reportes_clientes.observaciones ,empleados.apellido_p, empleados.apellido_m, empleados.nombres, 
         reportes_clientes.estado
         FROM ((reportes_clientes
         INNER JOIN empleados ON reportes_clientes.responsable = empleados.id_empleado)
@@ -149,6 +150,30 @@ module.exports={
         }
 
 
+    },
+
+    obtener_folio:(req,res)=>{
+        let condicion=req.params.condicion;
+        mysql.query(`select id_report from reportes_clientes where ${condicion}`, function(err,result,fields){
+            if(err){
+                res.json(err);
+            }else{
+                res.json(result);
+            }
+        })
+    },
+
+
+    obtener_reporte_folio:(req,res)=>{
+        let condicion=req.params.condicion;
+
+        mysql.query(`select fecha_hora_report, numero_habitacion, problema, observaciones, estado, comentarios from reportes_clientes where ${condicion}`, function(err,result,fields){
+            if(err){
+                res.json(err);
+            }else{
+                res.json(result);
+            }
+        })
     }
 
 

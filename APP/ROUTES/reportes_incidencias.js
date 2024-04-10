@@ -22,6 +22,19 @@ router.get('/Empleados_report/:empleado', function(req,res){
 
 })
 
+
+router.get('/Numero_folio/:condicion', function(req,res){
+
+    controllerbd.obtener_folio(req,res);
+
+})
+
+router.get('/Estado_reporte/:condicion', function(req,res){
+
+    controllerbd.obtener_reporte_folio(req,res);
+
+})
+
 //esta ruta de tipo "post" usa el controlador "agregar_reportes"
 router.post('/',function(req,res){
 
