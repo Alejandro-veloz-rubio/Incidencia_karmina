@@ -174,6 +174,38 @@ module.exports={
                 res.json(result);
             }
         })
+    },
+
+    //este controlador permite listar reportes de los clientes por area 
+    listar_reportes_area_reponsable:(req,res)=>{
+
+        //recibe por parametro el area 
+        let area=req.params.area;
+        mysql.query(`SELECT  reportes_clientes.id_report, reportes_clientes.numero_habitacion, 
+        reportes_clientes.problema,  reportes_clientes.observaciones ,empleados.apellido_p, empleados.apellido_m, empleados.nombres, 
+        reportes_clientes.estado
+        FROM ((reportes_clientes
+        INNER JOIN empleados ON reportes_clientes.responsable = empleados.id_empleado)
+        INNER JOIN areas_hotel ON reportes_clientes.area = areas_hotel.id_area) where areas_hotel.id_area=${area} && reportes_clientes.estado='En proceso'`, function(err,result,fields){
+            if(err){
+                res.json(err);
+            }else{
+                res.json(result);
+            }
+        })
+
+    },
+
+    listar_all_reports_open:(req,res)=>{
+
+        mysql.query(`SELECT * FROM  reportes_clientes INNER JOIN areas_hotel ON  reportes_clientes.area = areas_hotel.id_area where estado='abierto'`, function(err,result,fields){
+            if(err){
+                res.json(err);
+            }else{
+                res.json(result);
+            }
+        })
+
     }
 
 

@@ -35,6 +35,20 @@ router.get('/Estado_reporte/:condicion', function(req,res){
 
 })
 
+
+router.get('/reportes_area/responsable/:area',function(req,res){
+
+    controllerbd.listar_reportes_area_reponsable(req,res);
+
+})
+
+router.get('/todos_reportes/open', function(req,res){
+
+    controllerbd. listar_all_reports_open(req,res);
+
+})
+
+
 //esta ruta de tipo "post" usa el controlador "agregar_reportes"
 router.post('/',function(req,res){
 
